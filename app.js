@@ -28,7 +28,10 @@ function agregarAmigo() {
             const nombreLimpio = nombre.trim();
             if (nombreLimpio) {
                 if (/^[A-Za-zÀ-ÿ\s]+$/.test(nombreLimpio)) {
-                    if (!amigos.includes(nombreLimpio)) { // Verifica si el nombre ya existe
+                    const nombreEnMinusculas = nombreLimpio.toLowerCase();
+                    const amigosEnMinusculas = amigos.map(amigo => amigo.toLowerCase());
+
+                    if (!amigosEnMinusculas.includes(nombreEnMinusculas)) {
                         amigos.push(nombreLimpio);
                     } else {
                         alert(`"${nombreLimpio}" ya está en la lista.`);
@@ -47,14 +50,13 @@ function agregarAmigo() {
 function actualizarListaAmigos() {
     const listaAmigos = document.getElementById('listaAmigos');
     listaAmigos.innerHTML = '';
-    amigos.forEach((amigo, index) => { // Captura el índice correctamente
+    amigos.forEach((amigo, index) => {
         const li = document.createElement('li');
         li.textContent = amigo;
 
-        // Botón de eliminar
         const botonEliminar = document.createElement('button');
         botonEliminar.textContent = 'Eliminar';
-        botonEliminar.addEventListener('click', () => eliminarAmigo(index)); // Pasa el índice correcto
+        botonEliminar.addEventListener('click', () => eliminarAmigo(index));
         li.appendChild(botonEliminar);
 
         listaAmigos.appendChild(li);
@@ -81,7 +83,7 @@ function sortearAmigo() {
         alert('Necesitas al menos dos amigos para el sorteo.');
         return;
     }
-    // Verificar si hay nombres diferentes
+
     if (!nombresDiferentes(amigos)) {
         alert('Necesitas ingresar al menos dos nombres diferentes para el sorteo.');
         return;
@@ -89,17 +91,14 @@ function sortearAmigo() {
 
     let amigosSorteados = [...amigos];
 
-    // Mezcla avanzada con múltiples rondas
     for (let i = 0; i < amigos.length * 10; i++) {
         mezclarArray(amigosSorteados);
     }
 
-    // Asegura que nadie se regale a sí mismo
     while (amigosSorteados.some((amigo, index) => amigo === amigos[index])) {
         mezclarArray(amigosSorteados);
     }
 
-    // Almacena los resultados de forma segura
     for (let i = 0; i < amigos.length; i++) {
         resultados[amigos[i]] = amigosSorteados[i];
     }
@@ -140,15 +139,15 @@ function mezclarArray(array) {
     }
 }
 
-// Agregar event listener para la tecla "Enter"
-document.getElementById('amigo').addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        agregarAmigo();
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('amigo').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            agregarAmigo();
+        }
+    });
 });
 
-// Event listeners para los botones
 document.getElementById('agregar').addEventListener('click', agregarAmigo);
 document.getElementById('sortear').addEventListener('click', sortearAmigo);
 document.getElementById('nuevo').addEventListener('click', nuevoSorteo);
