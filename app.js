@@ -75,7 +75,7 @@ function eliminarAmigo(index) {
 
 function sortearAmigo() {
     if (sorteoRealizado) {
-        alert('No puedes eliminar amigos después de que se haya realizado el sorteo.');
+        alert('Realiza nuevo sorteo.');
         return;
     }
 
